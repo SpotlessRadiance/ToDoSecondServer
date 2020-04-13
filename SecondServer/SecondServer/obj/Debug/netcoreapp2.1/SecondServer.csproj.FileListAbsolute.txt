@@ -1,0 +1,14 @@
+C:\Users\User\source\repos\SecondServer\SecondServer\bin\Debug\netcoreapp2.1\SecondServer.deps.json
+C:\Users\User\source\repos\SecondServer\SecondServer\bin\Debug\netcoreapp2.1\SecondServer.runtimeconfig.json
+C:\Users\User\source\repos\SecondServer\SecondServer\bin\Debug\netcoreapp2.1\SecondServer.runtimeconfig.dev.json
+C:\Users\User\source\repos\SecondServer\SecondServer\bin\Debug\netcoreapp2.1\SecondServer.dll
+C:\Users\User\source\repos\SecondServer\SecondServer\obj\Debug\netcoreapp2.1\SecondServer.csprojAssemblyReference.cache
+C:\Users\User\source\repos\SecondServer\SecondServer\obj\Debug\netcoreapp2.1\SecondServer.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\SecondServer\SecondServer\obj\Debug\netcoreapp2.1\SecondServer.RazorAssemblyInfo.cache
+C:\Users\User\source\repos\SecondServer\SecondServer\obj\Debug\netcoreapp2.1\SecondServer.RazorAssemblyInfo.cs
+C:\Users\User\source\repos\SecondServer\SecondServer\obj\Debug\netcoreapp2.1\SecondServer.AssemblyInfoInputs.cache
+C:\Users\User\source\repos\SecondServer\SecondServer\obj\Debug\netcoreapp2.1\SecondServer.AssemblyInfo.cs
+C:\Users\User\source\repos\SecondServer\SecondServer\obj\Debug\netcoreapp2.1\SecondServer.RazorTargetAssemblyInfo.cache
+C:\Users\User\source\repos\SecondServer\SecondServer\bin\Debug\netcoreapp2.1\SecondServer.pdb
+C:\Users\User\source\repos\SecondServer\SecondServer\obj\Debug\netcoreapp2.1\SecondServer.dll
+C:\Users\User\source\repos\SecondServer\SecondServer\obj\Debug\netcoreapp2.1\SecondServer.pdb
