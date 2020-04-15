@@ -13,7 +13,8 @@ namespace SecondServer.Models
             base(options)
         {  }
         public DbSet<ToDoItem> ToDoItems { get; set; }
-        public DbSet<ToDoChange> ToDoHistory { get; set; }
+        public DbSet<ToDoChange> ToDoChange { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {//indexing table to decrease number of works
             base.OnModelCreating(modelBuilder);

@@ -27,8 +27,7 @@ namespace SecondServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddTransient<IItemsRepository, DataRepository>();
+            services.AddControllers();
             string conString = Configuration["ConnectionStrings:DataAccessPostgreSqlProvider"];
             string datesConString = Configuration["ConnectionStrings:DatesConnectionString"];
             services.AddDbContext<ToDoContext>(options => options.UseNpgsql(conString));
@@ -36,29 +35,20 @@ namespace SecondServer
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseHsts();
-            }
 
-            app.UseHttpsRedirection();
-            app.UseMvc(routes=>
-            {//there routes can be specified
-                routes.MapRoute(
-                 name: "default",
-                 template: "{controller=Home}/{action=Index}/{id?}");
+           app.UseHttpsRedirection();
+
+            app.UseRouting();
+
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+
+            
+            app.UseEndpoints(endpoints => {
+                endpoints.MapControllers();
             });
-              
-            app.UseCors((corsPolicyBuilder) =>
-            {//there sites that can get information specified
-                corsPolicyBuilder.AllowAnyMethod();
-                corsPolicyBuilder.AllowAnyOrigin();
-            });
-            }
         }
+    }
   }
-

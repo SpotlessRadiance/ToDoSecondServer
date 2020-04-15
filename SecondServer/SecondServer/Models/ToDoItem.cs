@@ -12,7 +12,9 @@ namespace SecondServer.Models
         public bool IsCompleted { get; set; }
         public DateTime RecentUpdate { get; protected set; }
         public List<ToDoChange> Changes { get; protected set; }
+
         public ToDoItem() {
+            IsCompleted = false;
             RecentUpdate = DateTime.Now;
             Changes = new List<ToDoChange>();
         }
