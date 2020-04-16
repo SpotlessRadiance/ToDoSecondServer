@@ -8,9 +8,5 @@ namespace SecondServer.Abstractions
 {
     interface IStorageContext
     {
-     //Add
-       /* Task ConnectToDatabase();
-        Task CreateTable();
-        Task DropDatabase();*/
     }
 }

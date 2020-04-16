@@ -9,7 +9,7 @@ namespace SecondServer.Abstractions
     public interface IItemsRepository
     {
         Task<IEnumerable<ToDoItem>> GetItemsAsync();
-
+        Task<IEnumerable<ToDoChange>> GetHistoryAsync(long id);
         Task<bool> AddItem(ToDoItem item);
         Task<ToDoItem> GetItem(long id);
         Task<bool> GetToDoStatus(long id);

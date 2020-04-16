@@ -29,8 +29,9 @@ namespace SecondServer
         {
             services.AddControllers();
             string conString = Configuration["ConnectionStrings:DataAccessPostgreSqlProvider"];
-            string datesConString = Configuration["ConnectionStrings:DatesConnectionString"];
             services.AddDbContext<ToDoContext>(options => options.UseNpgsql(conString));
+            services.AddTransient<IItemsRepository, DataRepository>();
+          // services.AddTransient<IChangesRepository, HistoryRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

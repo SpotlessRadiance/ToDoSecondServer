@@ -13,7 +13,7 @@ namespace SecondServer.Models
             base(options)
         {  }
         public DbSet<ToDoItem> ToDoItems { get; set; }
-        public DbSet<ToDoChange> ToDoChange { get; set; }
+        public DbSet<ToDoChange> ToDoChanges { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {//indexing table to decrease number of works
@@ -22,6 +22,17 @@ namespace SecondServer.Models
             modelBuilder.Entity<ToDoItem>().ToTable("ToDoItems");
             modelBuilder.Entity<ToDoItem>().HasIndex(x => x.IsCompleted);
             modelBuilder.Entity<ToDoItem>().HasIndex(x => x.RecentUpdate);
+            /* modelBuilder.Entity<ToDoItem>()
+                 .HasMany(c => c.Changes)
+                 .WithOne();*/
+            modelBuilder.Entity<ToDoChange>().HasKey(x => x.Id);
+            modelBuilder.Entity<ToDoChange>().ToTable("ToDoChanges");
+            modelBuilder.Entity<ToDoChange>().HasKey(x => x.Status);
+            modelBuilder.Entity<ToDoChange>()
+            .HasOne<ToDoItem>()
+            .WithMany()
+            .HasForeignKey(p => p.ItemId)
+            .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

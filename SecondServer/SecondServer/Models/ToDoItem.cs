@@ -19,21 +19,17 @@ namespace SecondServer.Models
             Changes = new List<ToDoChange>();
         }
 
-        public ToDoItem(long id, bool isCompleted)
+        public ToDoItem(bool isCompleted)
         {
-            this.ID = id;
             this.IsCompleted = isCompleted;
             RecentUpdate = DateTime.Now;
             Changes = new List<ToDoChange>();
         }
 
-        public void ChangeStatus(bool isCompleted)
+        public void AddChange(ToDoChange change)
         {
-            if (this.IsCompleted == isCompleted)
-                return;//if status hasn't changed, nothing changes
-            this.IsCompleted = isCompleted;
+            this.IsCompleted = change.Status;
             this.RecentUpdate = DateTime.Now;
-            ToDoChange change = new ToDoChange(RecentUpdate, isCompleted);
             Changes.Add(change);
         }
     }

@@ -7,7 +7,7 @@ namespace SecondServer.Abstractions
 {
     interface IStorage
     {
-        T GetRepository<T>() where T : IRepository;
+        T GetRepository<T>() where T : IChangesRepository;
         void Save(); //save changes from all repositories
     }
 }
