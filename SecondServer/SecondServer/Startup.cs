@@ -9,8 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using SecondServer.Middleware;
 using SecondServer.Models;
 using SecondServer.Abstractions;
 namespace SecondServer
@@ -24,28 +23,22 @@ namespace SecondServer
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
             string conString = Configuration["ConnectionStrings:DataAccessPostgreSqlProvider"];
             services.AddDbContext<ToDoContext>(options => options.UseNpgsql(conString));
             services.AddTransient<IItemsRepository, DataRepository>();
-          // services.AddTransient<IChangesRepository, HistoryRepository>();
+        //    services.AddHttpClient();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
-           app.UseHttpsRedirection();
-
+            app.UseMiddleware<AuthCheck>();
+            app.UseHttpsRedirection();
+           
             app.UseRouting();
-
-            app.UseCors(x => x
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader());
-
+            app.UseAuthorization();
             
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();

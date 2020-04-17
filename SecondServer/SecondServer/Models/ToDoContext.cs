@@ -22,17 +22,13 @@ namespace SecondServer.Models
             modelBuilder.Entity<ToDoItem>().ToTable("ToDoItems");
             modelBuilder.Entity<ToDoItem>().HasIndex(x => x.IsCompleted);
             modelBuilder.Entity<ToDoItem>().HasIndex(x => x.RecentUpdate);
-            /* modelBuilder.Entity<ToDoItem>()
-                 .HasMany(c => c.Changes)
-                 .WithOne();*/
-            modelBuilder.Entity<ToDoChange>().HasKey(x => x.Id);
-            modelBuilder.Entity<ToDoChange>().ToTable("ToDoChanges");
-            modelBuilder.Entity<ToDoChange>().HasKey(x => x.Status);
+           modelBuilder.Entity<ToDoChange>().HasKey(x => x.Id).HasName("PrimaryKey_Id") ;
             modelBuilder.Entity<ToDoChange>()
             .HasOne<ToDoItem>()
-            .WithMany()
+            .WithMany(t => t.Changes)
             .HasForeignKey(p => p.ItemId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Cascade); modelBuilder.Entity<ToDoChange>().ToTable("ToDoChanges");
+            modelBuilder.Entity<ToDoChange>().ToTable("ToDoChanges");
         }
     }
 }

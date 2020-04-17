@@ -8,18 +8,20 @@ namespace SecondServer.Models
 {
     public class ToDoChange
     {
+        [Key]
         public long Id { get; set; }
-        [Required]
         public long ItemId { get; set; }
         public bool Status { get; set; }
         public DateTime TimeChange { get; set; }
+    //    public ToDoItem Item { get; set; }
 
         public ToDoChange() { }
-        public ToDoChange( bool status, long item_id)
+        public ToDoChange( ToDoItem item)
         {
-            this.Status = status;
+            this.Status = item.IsCompleted;
             this.TimeChange = DateTime.Now;
-            this.ItemId = item_id;
+         //   this.Item = item;
+            this.ItemId = item.ID;
         }
     }
 }

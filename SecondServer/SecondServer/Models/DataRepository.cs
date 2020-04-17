@@ -20,7 +20,7 @@ namespace SecondServer.Models
         public async Task<bool> UpdateItem(ToDoItem item)
         {//обновляются только измененные свойства
             ToDoItem it = await GetItem(item.ID);
-            ToDoChange change = new ToDoChange(item.IsCompleted, it.ID);
+            ToDoChange change = new ToDoChange(item);
             it.IsCompleted = item.IsCompleted;
             it.AddChange(change);
             _context.Add(change);
@@ -45,8 +45,11 @@ namespace SecondServer.Models
 
         public async Task<IEnumerable<ToDoChange>> GetHistoryAsync(long id)
         {
-            return await _context.ToDoChanges.Where(c => c.ItemId == id).ToListAsync();
+            ToDoItem item = await _context.ToDoItems
+                .Include(c=>c.Changes)
+                .SingleOrDefaultAsync(c => c.ID == id);
 
+            return item.Changes;
         }
 
         public async Task<ToDoItem> GetItem(long id)
@@ -77,9 +80,10 @@ namespace SecondServer.Models
 
         public async Task<bool> AddItem(ToDoItem item)
         {
-            ToDoChange change = new ToDoChange(item.IsCompleted, item.ID);
-            item.AddChange(change);
             _context.Add(item);
+            await _context.SaveChangesAsync();
+            ToDoChange change = new ToDoChange(item);
+            item.AddChange(change);
             _context.Add(change);
             try
             {

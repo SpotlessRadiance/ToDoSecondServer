@@ -7,19 +7,22 @@ using SecondServer.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SecondServer.Abstractions;
+using Newtonsoft.Json;
+using System.Net.Http;
+
 namespace SecondServer.Controllers
 {
     [Produces("application/json")]
-    [Route("api/todo")]
+    [Route("api/todostatus")]
     [ApiController]
-    public class TodoController : ControllerBase
+    public class TodoStatusController : ControllerBase
     {
         private IItemsRepository repositoryItems;
-        private IChangesRepository repositoryChanges;
-        public TodoController(IItemsRepository repo, IChangesRepository repoCh)
-        {
+        private readonly IHttpClientFactory clientFactory;
+        public TodoStatusController(IItemsRepository repo, IHttpClientFactory factory)
+         { 
             repositoryItems = repo;
-            repositoryChanges = repoCh;
+           clientFactory = factory;
         }
 
         [HttpPost]
@@ -30,8 +33,8 @@ namespace SecondServer.Controllers
             {
                 return StatusCode(500);
             }
-            
-            return CreatedAtAction(nameof(repositoryItems.GetItem), new { id = item.ID }, item);
+            Dictionary<string, long> d = new Dictionary<string, long> { { "id", item.ID } };
+            return Ok(d);
         }
 
         [HttpDelete("{id}")]
@@ -51,7 +54,12 @@ namespace SecondServer.Controllers
             {
                 return StatusCode(400);
             }
-            return todoItem;
+            var response = new
+            {
+                status = todoItem.IsCompleted,
+                recent_change = todoItem.RecentUpdate
+            };
+            return Ok(response);
         }
 
         [HttpGet("history/{id}")]
@@ -62,11 +70,11 @@ namespace SecondServer.Controllers
             {
                 return StatusCode(400);
             }
-             var changes = await repositoryItems.GetHistoryAsync();
+             var changes = await repositoryItems.GetHistoryAsync(id);
             return Ok(changes);
         }
 
-        [HttpGet("status/{id}")]
+        [HttpGet("completed/{id}")]
         public async Task<ActionResult<ToDoItem>> GetItemStatus(long id)
         {
             var todoItem = await repositoryItems.GetItem(id);
@@ -84,7 +92,7 @@ namespace SecondServer.Controllers
             return Ok(Res);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
         public async Task<IActionResult> PutTodoItem(long id, [FromBody]ToDoItem item)
         {
             if (id != item.ID)
@@ -92,18 +100,12 @@ namespace SecondServer.Controllers
                 return StatusCode(400);
             }
             await repositoryItems.UpdateItem(item);
-            return Ok(item);
-        }
-
-        [HttpPut]
-        public async Task<IActionResult> PutTodoItem([FromBody]ToDoItem item)
-        {
-            bool completed = await repositoryItems.UpdateItem(item);
-            if (!completed)
+            var response = new
             {
-                return StatusCode(200);
-            }
-            return Ok(item);
+                completed = item.IsCompleted,
+                recent_change = item.RecentUpdate
+            };
+            return Ok(response);
         }
     }
 }
