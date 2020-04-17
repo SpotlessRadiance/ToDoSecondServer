@@ -12,17 +12,20 @@ namespace SecondServer.Models
         public bool IsCompleted { get; set; }
         public DateTime RecentUpdate { get; protected set; }
         public List<ToDoChange> Changes { get; protected set; }
-
+        public long UserId { get;  set; }
+        public int TodoItemId { get; protected set; }
         public ToDoItem() {
             IsCompleted = false;
             RecentUpdate = DateTime.Now;
             Changes = new List<ToDoChange>();
         }
 
-        public ToDoItem(bool isCompleted)
+        public ToDoItem(bool isCompleted, int itemId, long userId)
         {
-            this.IsCompleted = isCompleted;
+            IsCompleted = isCompleted;
             RecentUpdate = DateTime.Now;
+            TodoItemId = itemId;
+            UserId = userId;
             Changes = new List<ToDoChange>();
         }
 
@@ -32,5 +35,7 @@ namespace SecondServer.Models
             this.RecentUpdate = DateTime.Now;
             Changes.Add(change);
         }
+
+   
     }
 }

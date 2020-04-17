@@ -1,6 +1,7 @@
 ﻿using System.Net.Http;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace SecondServer.Middleware
 {
@@ -17,13 +18,6 @@ namespace SecondServer.Middleware
         {
             var Authorization = context.Request.Headers["Authorization"].ToString();
 
-            var request = new HttpRequestMessage(HttpMethod.Get,
-                "https://jsonplaceholder.typicode.com/todos/1");
-            request.Headers.Add("User-Agent", "HttpClientFactory-Sample");
-
-            var client = clientFactory.CreateClient();
-            var response = await client.SendAsync(request);
-            var data = await response.Content.ReadAsStringAsync();
             if (string.IsNullOrEmpty(Authorization))
             {
                 context.Response.StatusCode = 401;
@@ -31,8 +25,37 @@ namespace SecondServer.Middleware
             }
             else
             {
-     
-                await _next.Invoke(context);
+                var request = new HttpRequestMessage(HttpMethod.Post,
+                "http://localhost:4000/api/auth/getlogin");
+                request.Headers.Add("Authorization", Authorization);
+
+                var client = clientFactory.CreateClient();
+                var response = await client.SendAsync(request);
+                var data = await response.Content.ReadAsStringAsync();
+
+                if (response.StatusCode.ToString() == "OK")
+                {
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                        WriteIndented = true
+                    };
+                    var jsonModel = JsonSerializer.Deserialize<SecondServer.Models.JsonModel.GetLogin>(data, options);
+                    if (jsonModel.Authorized == true)
+                    {
+                        await _next.Invoke(context);
+                    }
+                    else
+                    {
+                        context.Response.StatusCode = 401;
+                        await context.Response.WriteAsync(response.StatusCode.ToString());
+                    }
+                }
+                else
+                {
+                    context.Response.StatusCode = 401;
+                    await context.Response.WriteAsync(response.StatusCode.ToString());
+                }
             }
         }
     }

@@ -29,12 +29,12 @@ namespace SecondServer
             string conString = Configuration["ConnectionStrings:DataAccessPostgreSqlProvider"];
             services.AddDbContext<ToDoContext>(options => options.UseNpgsql(conString));
             services.AddTransient<IItemsRepository, DataRepository>();
-        //    services.AddHttpClient();
+            services.AddHttpClient();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseMiddleware<AuthCheck>();
+        //   app.UseMiddleware<AuthCheck>();
             app.UseHttpsRedirection();
            
             app.UseRouting();

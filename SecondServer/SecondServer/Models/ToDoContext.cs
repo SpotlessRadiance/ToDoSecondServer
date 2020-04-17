@@ -19,9 +19,11 @@ namespace SecondServer.Models
         {//indexing table to decrease number of works
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<ToDoItem>().HasKey(x => x.ID);
-            modelBuilder.Entity<ToDoItem>().ToTable("ToDoItems");
+            modelBuilder.Entity<ToDoItem>().ToTable("ToDoItemsInfo");
             modelBuilder.Entity<ToDoItem>().HasIndex(x => x.IsCompleted);
             modelBuilder.Entity<ToDoItem>().HasIndex(x => x.RecentUpdate);
+            modelBuilder.Entity<ToDoItem>().HasIndex(x => x.TodoItemId);
+            modelBuilder.Entity<ToDoItem>().HasIndex(x => x.UserId);
            modelBuilder.Entity<ToDoChange>().HasKey(x => x.Id).HasName("PrimaryKey_Id") ;
             modelBuilder.Entity<ToDoChange>()
             .HasOne<ToDoItem>()

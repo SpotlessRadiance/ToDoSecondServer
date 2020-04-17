@@ -17,9 +17,11 @@ namespace SecondServer.Models
             _context = context;
         }
 
-        public async Task<bool> UpdateItem(ToDoItem item)
+        public async Task<bool> UpdateItem(ToDoItem item, long userId)
         {//обновляются только измененные свойства
             ToDoItem it = await GetItem(item.ID);
+            if (userId != it.UserId)
+                return false;
             ToDoChange change = new ToDoChange(item);
             it.IsCompleted = item.IsCompleted;
             it.AddChange(change);
@@ -35,17 +37,19 @@ namespace SecondServer.Models
             }
         }
 
-        public async Task<IEnumerable<ToDoItem>> GetItemsAsync()
+        public async Task<IEnumerable<ToDoItem>> GetItemsAsync(long userId)
         {
-            return await _context.ToDoItems.
-                OrderBy(c => c.RecentUpdate)
+            return await _context.ToDoItems
+                 .Where(c => c.UserId == userId)
+                .OrderBy(c => c.RecentUpdate)
                 .Include(c=>c.Changes)
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<ToDoChange>> GetHistoryAsync(long id)
+        public async Task<IEnumerable<ToDoChange>> GetHistoryAsync(long id, long userId)
         {
             ToDoItem item = await _context.ToDoItems
+                .Where(c=>c.UserId==userId)
                 .Include(c=>c.Changes)
                 .SingleOrDefaultAsync(c => c.ID == id);
 
@@ -64,12 +68,14 @@ namespace SecondServer.Models
             return item.IsCompleted;
         }
 
-        public async Task<bool> DeleteItem(long id)
+        public async Task<bool> DeleteItem(long id, long userId)
         {
-            var customer = await _context.ToDoItems
+            var status = await _context.ToDoItems
                                 .Include(c => c.Changes)
                                 .SingleOrDefaultAsync(c => c.ID== id);
-            _context.Remove(customer);
+            if (status.UserId != userId)
+                return false;
+            _context.Remove(status);
             try
             {
                 return (await _context.SaveChangesAsync() > 0 ? true : false);
