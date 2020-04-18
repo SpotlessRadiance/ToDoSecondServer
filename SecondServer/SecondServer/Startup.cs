@@ -27,15 +27,15 @@ namespace SecondServer
         {
             services.AddControllers();
             string conString = Configuration["ConnectionStrings:DataAccessPostgreSqlProvider"];
-            services.AddDbContext<ToDoContext>(options => options.UseNpgsql(conString));
+            services.AddDbContext<ToDoContext>(options => options.UseNpgsql("password=secret;Host=localhost;Port=5432;Database=dates;username=postgres;"));
             services.AddTransient<IItemsRepository, DataRepository>();
             services.AddHttpClient();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-        //   app.UseMiddleware<AuthCheck>();
-            app.UseHttpsRedirection();
+            app.UseMiddleware<AuthCheck>();
+            //app.UseHttpsRedirection();
            
             app.UseRouting();
             app.UseAuthorization();

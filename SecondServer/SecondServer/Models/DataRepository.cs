@@ -73,7 +73,7 @@ namespace SecondServer.Models
             var status = await _context.ToDoItems
                                 .Include(c => c.Changes)
                                 .SingleOrDefaultAsync(c => c.ID== id);
-            if (status.UserId != userId)
+            if (status.UserId != userId || status == null)
                 return false;
             _context.Remove(status);
             try

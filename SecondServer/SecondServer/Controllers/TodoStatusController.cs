@@ -59,14 +59,14 @@ namespace SecondServer.Controllers
             return StatusCode(200);
         }
 
-        [HttpPost("new/{task}/{completed}")]
-        public async Task<ActionResult<ToDoItem>> PostToDoItem( bool completed, int task) {
+        [HttpPost("new/{task}")]
+        public async Task<ActionResult<ToDoItem>> PostToDoItem(int task) {
             GetLogin userinfo = await GetLoginUser();
             if (userinfo == null)
             {
                 return StatusCode(403);
             }
-            ToDoItem item = new ToDoItem(completed, task,userinfo.Id);
+            ToDoItem item = new ToDoItem(false, task,userinfo.Id);
             bool done = await repositoryItems.AddItem(item);
             if (!done)
             {
@@ -76,7 +76,7 @@ namespace SecondServer.Controllers
             return Ok(d);
         }
 
-    [HttpGet("{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<ToDoItem>> GetTodoItem(long id)
         {
             GetLogin userinfo = await GetLoginUser();
