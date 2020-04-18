@@ -142,7 +142,7 @@ namespace SecondServer.Controllers
             return Ok(Res);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<IActionResult> PutTodoItem(long id, [FromBody]ToDoItem item)
         { 
             GetLogin userinfo = await GetLoginUser();
@@ -162,6 +162,7 @@ namespace SecondServer.Controllers
             };
             return Ok(response);
         }
+
 
      public async Task<GetLogin> GetLoginUser()
         {
